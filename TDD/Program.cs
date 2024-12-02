@@ -28,14 +28,14 @@
         {
             if (string.IsNullOrWhiteSpace(userId))
             {
-                var message = "Nieprawidłowy userId: pole jest puste.";
+                var message = "Nieprawidlowy userId: pole jest puste.";
                 _logger.Log(message);
                 return new TransactionResult(false, null, message);
             }
 
             if (amount <= 0)
             {
-                var message = "Kwota musi być dodatnia.";
+                var message = "Kwota musi byc dodatnia.";
                 _logger.Log(message);
                 return new TransactionResult(false, null, message);
             }
@@ -45,23 +45,23 @@
                 var result = _gateway.Charge(userId, amount);
                 if (result.Success)
                 {
-                    _logger.Log("Płatność przetworzona pomyślnie.");
+                    _logger.Log("Platnosc przetworzona pomyslnie.");
                 }
                 else
                 {
-                    _logger.Log($"Płatność nie powiodła się: {result.Message}");
+                    _logger.Log($"Platnosc nie powiodla się: {result.Message}");
                 }
                 return result;
             }
             catch (NetworkException ex)
             {
-                var message = $"Błąd sieciowy: płatność nieudana. {ex.Message}";
+                var message = $"Blad sieciowy: platnosc nieudana. {ex.Message}";
                 _logger.Log(message);
                 return new TransactionResult(false, null, message);
             }
             catch (PaymentException ex)
             {
-                var message = $"Błąd płatności: {ex.Message}";
+                var message = $"Blad platnosci: {ex.Message}";
                 _logger.Log(message);
                 return new TransactionResult(false, null, message);
             }
@@ -71,7 +71,7 @@
         {
             if (string.IsNullOrWhiteSpace(transactionId))
             {
-                var message = "Nieprawidłowy transactionId: pole jest puste.";
+                var message = "Nieprawidlowy transactionId: pole jest puste.";
                 _logger.Log(message);
                 return new TransactionResult(false, null, message);
             }
@@ -81,23 +81,23 @@
                 var result = _gateway.Refund(transactionId);
                 if (result.Success)
                 {
-                    _logger.Log("Zwrot przetworzony pomyślnie.");
+                    _logger.Log("Zwrot przetworzony pomyslnie.");
                 }
                 else
                 {
-                    _logger.Log($"Zwrot nie powiódł się: {result.Message}");
+                    _logger.Log($"Zwrot nie powiodl się: {result.Message}");
                 }
                 return result;
             }
             catch (NetworkException ex)
             {
-                var message = $"Błąd sieciowy podczas zwrotu: {ex.Message}";
+                var message = $"Blad sieciowy podczas zwrotu: {ex.Message}";
                 _logger.Log(message);
                 return new TransactionResult(false, null, message);
             }
             catch (RefundException ex)
             {
-                var message = $"Błąd zwrotu: {ex.Message}";
+                var message = $"Blad zwrotu: {ex.Message}";
                 _logger.Log(message);
                 return new TransactionResult(false, null, message);
             }
@@ -107,18 +107,18 @@
         {
             if (string.IsNullOrWhiteSpace(transactionId))
             {
-                throw new ArgumentException("Nieprawidłowy transactionId: pole jest puste.");
+                throw new ArgumentException("Nieprawidlowy transactionId: pole jest puste.");
             }
 
             try
             {
                 var status = _gateway.GetStatus(transactionId);
-                _logger.Log($"Stan płatności: {status}");
+                _logger.Log($"Stan platnosci: {status}");
                 return status;
             }
             catch (NetworkException)
             {
-                throw new Exception("Błąd sieciowy podczas pobierania statusu.");
+                throw new Exception("Blad sieciowy podczas pobierania statusu.");
             }
         }
     }
