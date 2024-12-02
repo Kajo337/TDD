@@ -11,6 +11,10 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
+    - name: Install Coverlet
+      run: |
+        dotnet tool install --global coverlet.console
+        dotnet tool list -g
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
@@ -18,11 +22,9 @@ jobs:
     - name: Test with coverage
       run: |
         dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-report
-        path: "**/coverage.opencover.xml"
+    - name: Display Coverage Report
+      run: |
+        coverlet "./TestProject/bin/Debug/net8.0/TestProject.dll" --target "dotnet" --targetargs "test --no-build"
 
   lint:
     runs-on: ubuntu-latest
