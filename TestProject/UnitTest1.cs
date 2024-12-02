@@ -3,7 +3,7 @@ using TransactionStatus = TDDProgram.TransactionStatus;
 public class PaymentProcessorTests
 {
     [Fact]
-    public void ProcesujPlatnosc_PowinnoZwracacSukces_GdyPlatnoscZostalaPrzetworzonaPomyœlnie()
+    public void ProcesujPlatnosc_PowinnoZwracacSukces_GdyPlatnoscZostalaPrzetworzonaPomyslnie()
     {
         // Arrange
         var gateway = new StubPaymentGateway
@@ -60,7 +60,7 @@ public class PaymentProcessorTests
     }
 
     [Fact]
-    public void DokonajZwrotu_PowinnoZwracacSukces_GdyZwrotZostaniePrzetworzonyPomyœlnie()
+    public void DokonajZwrotu_PowinnoZwracacSukces_GdyZwrotZostaniePrzetworzonyPomyslnie()
     {
         // Arrange
         var gateway = new StubPaymentGateway
