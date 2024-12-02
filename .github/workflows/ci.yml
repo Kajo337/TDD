@@ -1,38 +1,60 @@
-name: CI Pipeline
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-on: [push, pull_request]
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
+  lint:
+    needs: build-and-test
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Super-Linter
+        uses: super-linter/super-linter@v7.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_GIT_COMMITLINT: false
+          VALIDATE_YAML_PRETTIER: false
+          VALIDATE_CSHARP: false
+          VALIDATE_JSCPD: false
+          
+          
+            
+
   build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: 8.0.x
+    - name: Install Coverlet
+      run: |
+        dotnet tool install --global coverlet.console
+        dotnet tool list -g
+    
     - name: Restore dependencies
       run: dotnet restore
+    
     - name: Build
       run: dotnet build --no-restore
-    - name: Test with coverage
+    
+    - name: Run Tests
+      run: dotnet test --no-build --verbosity normal
+      
+    - name: Display Coverage Report
       run: |
-        dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-report
-        path: "**/coverage.opencover.xml"
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Run Super-Linter
-      uses: github/super-linter@v4
-      env:
-        VALIDATE_ALL_CODEBASE: true
-        DEFAULT_BRANCH: main
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VALIDATE_CSHARP: true
-        FIX: true
+        export PATH="$PATH:/home/runner/.dotnet/tools"
+        coverlet "./TestProject/bin/Debug/net8.0/TestProject.dll" --target "dotnet" --targetargs "test --no-build"
