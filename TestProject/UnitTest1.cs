@@ -8,7 +8,7 @@ public class PaymentProcessorTests
         // Arrange
         var gateway = new StubPaymentGateway
         {
-            ChargeResult = new TransactionResult(true, "trans123", "Obci¹¿enie zakoñczone sukcesem.")
+            ChargeResult = new TransactionResult(true, "trans123", "Obciazenie zakonczone sukcesem.")
         };
         var logger = new StubLogger();
         var processor = new PaymentProcessor(gateway, logger);
@@ -19,8 +19,8 @@ public class PaymentProcessorTests
         // Assert
         Assert.True(result.Success);
         Assert.Equal("trans123", result.TransactionId);
-        Assert.Equal("Obci¹¿enie zakoñczone sukcesem.", result.Message);
-        Assert.Equal("P³atnoœæ przetworzona pomyœlnie.", logger.LastLog);
+        Assert.Equal("Obciazenie zakonczone sukcesem.", result.Message);
+        Assert.Equal("Platnosc przetworzona pomyslnie.", logger.LastLog);
     }
 
     [Fact]
@@ -37,8 +37,8 @@ public class PaymentProcessorTests
         // Assert
         Assert.False(result.Success);
         Assert.Null(result.TransactionId);
-        Assert.Equal("Nieprawid³owy userId: pole jest puste.", result.Message);
-        Assert.Equal("Nieprawid³owy userId: pole jest puste.", logger.LastLog);
+        Assert.Equal("Nieprawidlowy userId: pole jest puste.", result.Message);
+        Assert.Equal("Nieprawidlowy userId: pole jest puste.", logger.LastLog);
     }
 
     [Fact]
@@ -55,8 +55,8 @@ public class PaymentProcessorTests
         // Assert
         Assert.False(result.Success);
         Assert.Null(result.TransactionId);
-        Assert.Equal("Kwota musi byæ dodatnia.", result.Message);
-        Assert.Equal("Kwota musi byæ dodatnia.", logger.LastLog);
+        Assert.Equal("Kwota musi byc dodatnia.", result.Message);
+        Assert.Equal("Kwota musi byc dodatnia.", logger.LastLog);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class PaymentProcessorTests
         // Arrange
         var gateway = new StubPaymentGateway
         {
-            RefundResult = new TransactionResult(true, "trans123", "Zwrot zakoñczony sukcesem.")
+            RefundResult = new TransactionResult(true, "trans123", "Zwrot zakonczony sukcesem.")
         };
         var logger = new StubLogger();
         var processor = new PaymentProcessor(gateway, logger);
@@ -76,8 +76,8 @@ public class PaymentProcessorTests
         // Assert
         Assert.True(result.Success);
         Assert.Equal("trans123", result.TransactionId);
-        Assert.Equal("Zwrot zakoñczony sukcesem.", result.Message);
-        Assert.Equal("Zwrot przetworzony pomyœlnie.", logger.LastLog);
+        Assert.Equal("Zwrot zakonczony sukcesem.", result.Message);
+        Assert.Equal("Zwrot przetworzony pomyslnie.", logger.LastLog);
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public class PaymentProcessorTests
 
         // Assert
         Assert.Equal(TransactionStatus.COMPLETED, status);
-        Assert.Equal("Stan p³atnoœci: COMPLETED", logger.LastLog);
+        Assert.Equal("Stan platnosci: COMPLETED", logger.LastLog);
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public class PaymentProcessorTests
 
         // Act & Assert
         var ex = Assert.Throws<ArgumentException>(() => processor.GetPaymentStatus(""));
-        Assert.Equal("Nieprawid³owy transactionId: pole jest puste.", ex.Message);
+        Assert.Equal("Nieprawidlowy transactionId: pole jest puste.", ex.Message);
     }
 }
 
